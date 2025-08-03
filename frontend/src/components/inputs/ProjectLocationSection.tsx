@@ -1,9 +1,10 @@
 import type { FunctionalComponent } from "preact";
 import type { SolarFormData } from "../../types/SolarFormData";
 import {
-  validateSingleField,
+  validateField,
   type ValidationErrors,
 } from "../../utils/validateFormData";
+import { LabeledField } from "../shared/LabeledField";
 
 interface Props {
   formData: SolarFormData;
@@ -20,7 +21,7 @@ export const ProjectLocationSection: FunctionalComponent<Props> = ({
     const target = e.target as HTMLInputElement;
     const { name, value } = target;
 
-    const error = validateSingleField(name as keyof SolarFormData, value);
+    const error = validateField(name as keyof SolarFormData, value);
     if (error) {
       // optional: show inline, but don't set state here unless managing per-field errors
     }
@@ -34,32 +35,26 @@ export const ProjectLocationSection: FunctionalComponent<Props> = ({
   return (
     <fieldset className="form-section">
       <legend>📍 Project Location</legend>
-
-      <label>
-        Zip Code:
-        <input
-          type="text"
+      <div className="columns">
+        <LabeledField
+          label="Zip Code"
           name="zip"
+          type="text"
           value={formData.zip}
-          onInput={handleChange}
           required
+          error={errors.zip}
+          onChange={handleChange}
         />
-        {errors.zip && <span className="error">{errors.zip}</span>}
-      </label>
-
-      <label>
-        Monthly Electric Bill ($):
-        <input
-          type="number"
+        <LabeledField
+          label="Monthly Electric Bill ($)"
           name="monthlyBill"
+          type="number"
           value={formData.monthlyBill}
-          onInput={handleChange}
           required
+          error={errors.monthlyBill}
+          onChange={handleChange}
         />
-        {errors.monthlyBill && (
-          <span className="error">{errors.monthlyBill}</span>
-        )}
-      </label>
+      </div>
     </fieldset>
   );
 };

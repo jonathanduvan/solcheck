@@ -2,7 +2,7 @@ import type { SolarFormData as SolarFormData } from "../types/SolarFormData";
 
 export type ValidationErrors = Partial<Record<keyof SolarFormData, string>>;
 
-export function validateSingleField(
+export function validateField(
   field: keyof SolarFormData,
   value: string | boolean
 ): string | null {

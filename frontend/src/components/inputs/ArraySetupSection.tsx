@@ -1,6 +1,8 @@
 import type { FunctionalComponent } from "preact";
 import type { SolarFormData } from "../../types/SolarFormData";
 import type { ValidationErrors } from "../../utils/validateFormData";
+import { validateField } from "../../utils/validateFormData";
+import { LabeledField } from "../shared/LabeledField";
 
 interface Props {
   formData: SolarFormData;
@@ -11,65 +13,72 @@ interface Props {
 export const ArraySetupSection: FunctionalComponent<Props> = ({
   formData,
   setFormData,
+  errors,
 }) => {
   const handleChange = (e: Event) => {
     const target = e.target as HTMLInputElement;
-    setFormData({ ...formData, [target.name]: target.value });
+    const { name, value } = target;
+
+    const error = validateField(name as keyof SolarFormData, value);
+    if (error) {
+      // optional: show inline, but don't set state here unless managing per-field errors
+    }
+
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
   return (
     <fieldset className="form-section">
       <legend>📐 Array Setup</legend>
-
-      <label>
-        Module Model:
-        <input
-          type="text"
+      <div className="columns">
+        <LabeledField
+          label="Module Model"
           name="moduleModel"
+          type="text"
           value={formData.moduleModel}
-          onInput={handleChange}
+          onChange={handleChange}
+          error={errors.moduleModel}
         />
-      </label>
 
-      <label>
-        Module Power (W):
-        <input
-          type="number"
+        <LabeledField
+          label="Module Power (W)"
           name="modulePower"
+          type="number"
           value={formData.modulePower}
-          onInput={handleChange}
+          onChange={handleChange}
+          error={errors.modulePower}
         />
-      </label>
 
-      <label>
-        Number of Modules:
-        <input
-          type="number"
+        <LabeledField
+          label="Number of Modules"
           name="moduleCount"
+          type="number"
           value={formData.moduleCount}
-          onInput={handleChange}
+          onChange={handleChange}
+          error={errors.moduleCount}
         />
-      </label>
 
-      <label>
-        Azimuth (0–360°):
-        <input
-          type="number"
+        <LabeledField
+          label="Azimuth (0–360°)"
           name="azimuth"
-          value={formData.azimuth}
-          onInput={handleChange}
-        />
-      </label>
-
-      <label>
-        Tilt (degrees):
-        <input
           type="number"
-          name="tilt"
-          value={formData.tilt}
-          onInput={handleChange}
+          value={formData.azimuth}
+          onChange={handleChange}
+          error={errors.azimuth}
         />
-      </label>
+
+        <LabeledField
+          label="Tilt (degrees)"
+          name="tilt"
+          type="number"
+          value={formData.tilt}
+          onChange={handleChange}
+          error={errors.tilt}
+        />
+      </div>
     </fieldset>
   );
 };

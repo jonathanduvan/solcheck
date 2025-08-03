@@ -1,6 +1,10 @@
 import type { FunctionalComponent } from "preact";
 import type { SolarFormData } from "../../types/SolarFormData";
-import type { ValidationErrors } from "../../utils/validateFormData";
+import {
+  validateField,
+  type ValidationErrors,
+} from "../../utils/validateFormData";
+import { LabeledField } from "../shared/LabeledField";
 
 interface Props {
   formData: SolarFormData;
@@ -11,45 +15,48 @@ interface Props {
 export const InverterSetupSection: FunctionalComponent<Props> = ({
   formData,
   setFormData,
+  errors,
 }) => {
   const handleChange = (e: Event) => {
     const target = e.target as HTMLInputElement;
+
+    const { name, value } = target;
+
+    validateField(name as keyof SolarFormData, String(value));
     setFormData({ ...formData, [target.name]: target.value });
   };
 
   return (
     <fieldset className="form-section">
       <legend>⚡ Inverter Setup</legend>
-
-      <label>
-        Inverter Model:
-        <input
-          type="text"
+      <div className="columns">
+        <LabeledField
+          label="Inverter Model"
           name="inverterModel"
+          type="text"
           value={formData.inverterModel}
-          onInput={handleChange}
+          onChange={handleChange}
+          error={errors.inverterModel}
         />
-      </label>
 
-      <label>
-        Number of MPPT Inputs:
-        <input
+        <LabeledField
+          label="Number of MPPT Inputs"
+          name="mpptInputs"
           type="number"
-          name="numMpptInputs"
           value={formData.mpptInputs}
-          onInput={handleChange}
+          onChange={handleChange}
+          error={errors.mpptInputs}
         />
-      </label>
 
-      <label>
-        Max DC Voltage:
-        <input
-          type="number"
+        <LabeledField
+          label="Max DC Voltage"
           name="maxDcVoltage"
+          type="number"
           value={formData.maxDcVoltage}
-          onInput={handleChange}
+          onChange={handleChange}
+          error={errors.maxDcVoltage}
         />
-      </label>
+      </div>
     </fieldset>
   );
 };

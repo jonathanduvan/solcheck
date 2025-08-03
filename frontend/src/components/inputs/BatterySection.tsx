@@ -1,6 +1,7 @@
 import type { FunctionalComponent } from "preact";
 import type { SolarFormData } from "../../types/SolarFormData";
 import type { ValidationErrors } from "../../utils/validateFormData";
+import { ToggleField } from "../shared/ToggleField";
 
 interface Props {
   formData: SolarFormData;
@@ -11,6 +12,7 @@ interface Props {
 export const BatterySection: FunctionalComponent<Props> = ({
   formData,
   setFormData,
+  errors,
 }) => {
   const handleToggle = (e: Event) => {
     const target = e.target as HTMLInputElement;
@@ -23,16 +25,15 @@ export const BatterySection: FunctionalComponent<Props> = ({
   return (
     <fieldset className="form-section">
       <legend>🔋 Battery Setup</legend>
-
-      <label>
-        <input
-          type="checkbox"
+      <div className="columns">
+        <ToggleField
+          label="Include Battery Storage?"
           name="batteryIncluded"
           checked={formData.batteryIncluded}
           onChange={handleToggle}
+          error={errors.batteryIncluded}
         />
-        Include Battery Storage?
-      </label>
+      </div>
     </fieldset>
   );
 };

@@ -5,7 +5,7 @@ import {
   type ValidationErrors,
 } from "../utils/validateFormData";
 import type { SolarFormData } from "../types/SolarFormData";
-import { validateSingleField } from "../utils/validateFormData";
+import { validateField } from "../utils/validateFormData";
 
 import { initialFormData } from "../constants/initialFormData";
 
@@ -28,7 +28,7 @@ export function FormProvider({
 
   function setField(key: keyof SolarFormData, value: string) {
     setFormData((prev) => ({ ...prev, [key]: value }));
-    const newError = validateSingleField(key, value);
+    const newError = validateField(key, value);
     setErrors((prev) => ({ ...prev, [key]: undefined })); // clear error on change
   }
 
